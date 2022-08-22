@@ -1,12 +1,20 @@
 package db
 
+import (
+	_ "ToDo/models"
+)
+
 func GetUsernameAvailable(username string) bool {
-	result, err := Db.Exec("SELECT `Name` FROM `Users` WHERE `Name` = ?;", username)
+	// var user models.User
+	rows, err := Db.Query("SELECT `Name` FROM `Users` WHERE `Name` = ?;", username)
 	if err != nil {
 		return false
 	}
-	_, err = result.LastInsertId()
-	return err == nil
+	for rows.Next() {
+		rows.Scan(&username)
+	}
+	println(username)
+	return false
 }
 
 func GetUserBySessionID(sessionID string) (string, error) {

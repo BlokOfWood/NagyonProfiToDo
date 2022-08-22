@@ -4,7 +4,6 @@ import (
 	"ToDo/db"
 	"ToDo/models"
 	"ToDo/utils"
-	"fmt"
 	"net/http"
 )
 
@@ -13,18 +12,19 @@ func ToDo_Controller(w http.ResponseWriter, r *http.Request) {
 	SessionID := r.Header.Get("sessionID")
 	// Validate SessionID
 	if !utils.ValidateSessionID(SessionID) {
-		fmt.Println("Invalid sessionID")
-		http.Redirect(w, r, "/login", http.StatusForbidden)
+		http.Error(w, "Invalid sessionID", http.StatusForbidden)
+		return
 	}
-	var err error
+	// Get UserID by SessionID
+	userID, err := db.GetUserIDBySessionID(SessionID)
+	if err != nil {
+		http.Error(w, "Invalid sessionID", http.StatusForbidden)
+		return
+	}
 	switch r.Method {
 
 	case http.MethodGet:
-		// Get username by SessionID
-		userID, err := db.GetUserIDBySessionID(SessionID)
-		if err != nil {
-			http.Redirect(w, r, "/login", http.StatusForbidden)
-		}
+
 		// Get todos by username
 		result, err := db.GetToDosFromDB(userID)
 		if err != nil {
@@ -36,15 +36,11 @@ func ToDo_Controller(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPost:
 		var request models.TodoEditor
 
+		// Validate data
 		if DecodeRequest(w, r, &request) {
 			return
 		}
-
-		//
-		request.UserID, err = db.GetUserIDBySessionID(SessionID)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
+		request.UserID = userID
 
 		//
 		id, err := db.CreateToDo(request)

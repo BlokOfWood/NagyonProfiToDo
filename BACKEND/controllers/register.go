@@ -19,16 +19,16 @@ func Register_Controller(w http.ResponseWriter, r *http.Request) {
 		password := r.Header.Get("password")
 		passwordRepeated := r.Header.Get("passwordRepeated")
 
+		if !db.GetUsernameAvailable(username) {
+			fmt.Println("Sanyi szar a username")
+			w.Write([]byte("Sanyi szar a username"))
+			return
+		}
+
 		//Validate Passwords
 		if !utils.CheckPasswords(password, passwordRepeated) {
 			fmt.Println("Sanyi szar a password")
 			w.Write([]byte("Sanyi szar a password"))
-			return
-		}
-
-		if !db.GetUsernameAvailable(username) {
-			fmt.Println("Sanyi szar a username")
-			w.Write([]byte("Sanyi szar a username"))
 			return
 		}
 

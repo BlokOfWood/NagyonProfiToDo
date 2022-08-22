@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"ToDo/db"
+	"ToDo/models"
 	"ToDo/utils"
 	"fmt"
 	"net/http"
@@ -31,10 +32,13 @@ func Login_Controller(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid sesssionId", http.StatusForbidden)
 		}
 
-		if !db.UpdateSessionID(username) {
+		sessionID, err := db.UpdateSessionID(username)
+		if err != nil {
 			fmt.Println("Nem sikerült a sessionID update, bár ez nem tudom miért baj ")
 		}
 
-		w.Write([]byte("Success login"))
+		var Sanyi models.SID
+		Sanyi.SessionID = sessionID
+		SendResponse(w, Sanyi)
 	}
 }
