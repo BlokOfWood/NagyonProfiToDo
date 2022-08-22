@@ -2,7 +2,8 @@ package controllers
 
 import (
 	"ToDo/db"
-	"ToDo/utils"
+	"ToDo/models"
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -14,25 +15,22 @@ func Register_Controller(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Send back registration form"))
 
 	case http.MethodPost:
-		username := r.Header.Get("username")
-		email := r.Header.Get("email")
-		password := r.Header.Get("password")
-		passwordRepeated := r.Header.Get("passwordRepeated")
+		var registrationInfo models.RegistrationInfo
+		beszarok := r.Body
+		fmt.Println(beszarok)
+		decoder := json.NewDecoder(beszarok)
+		fmt.Println(beszarok)
+		decoder.Decode(registrationInfo)
+		fmt.Println(registrationInfo)
+		DecodeRequest(w, r, registrationInfo)
 
-		if !db.GetUsernameAvailable(username) {
+		if !db.GetUsernameAvailable(registrationInfo.Username) {
 			fmt.Println("Sanyi szar a username")
 			w.Write([]byte("Sanyi szar a username"))
 			return
 		}
 
-		//Validate Passwords
-		if !utils.CheckPasswords(password, passwordRepeated) {
-			fmt.Println("Sanyi szar a password")
-			w.Write([]byte("Sanyi szar a password"))
-			return
-		}
-
-		if !db.CreateUser(&username, &email, &password) {
+		if !db.CreateUser(&registrationInfo) {
 			fmt.Println("HEH?")
 			return
 		}

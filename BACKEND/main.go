@@ -28,7 +28,7 @@ func main() {
 	fmt.Println("Connecting to database")
 	db.ConnectDatabase()
 	fmt.Println("Set up CORS.")
-	header := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization", "X-Content-Type-Options"})
+	header := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization", "X-Content-Type-Options", "username", "password", "sessionID"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST", "PATCH", "DELETE"})
 	origins := handlers.AllowedOrigins([]string{"*"})
 	// origins := handlers.AllowedOrigins([]string{"localhost:4000"})

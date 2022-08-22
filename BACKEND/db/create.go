@@ -5,15 +5,15 @@ import (
 	"ToDo/utils"
 )
 
-func CreateUser(username *string, email *string, password *string) bool {
+func CreateUser(registrationInfo *models.RegistrationInfo) bool {
 	//Generate Salt
 	salt := utils.GenerateSalt()
 
 	//Generate SaltedHash
-	saltedHash := utils.EncodePassword(*password, salt)
+	saltedHash := utils.EncodePassword(registrationInfo.Password, salt)
 
 	// INSERT INTO
-	_, err := Db.Exec("INSERT INTO `Users`(`Name`,`Email`,`PasswordHash`,`Salt`) VALUES(?,?,?,?);", username, email, saltedHash, salt)
+	_, err := Db.Exec("INSERT INTO `Users`(`Name`,`Email`,`PasswordHash`,`Salt`) VALUES(?,?,?,?);", registrationInfo.Username, registrationInfo.Email, saltedHash, salt)
 
 	return err == nil
 }

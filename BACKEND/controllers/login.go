@@ -15,24 +15,31 @@ func Login_Controller(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Send back login page"))
 
 	case http.MethodPost:
-		username := r.Header.Get("username")
 
-		salt, err := db.GetSaltFromDB(username)
+		var loginInfo models.LoginInfo
+
+		DecodeRequest(w, r, loginInfo)
+
+		salt, err := db.GetSaltFromDB(loginInfo.Username)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
-		hash := utils.EncodePassword(r.Header.Get("password"), salt)
-		dbHash, err := db.GetHashFromDB(username)
+		hash := utils.EncodePassword(loginInfo.Password, salt)
+
+		dbHash, err := db.GetHashFromDB(loginInfo.Username)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		if hash != dbHash {
-			http.Error(w, "Invalid sesssionId", http.StatusForbidden)
+			http.Error(w, "Bad password", http.StatusForbidden)
+			return
 		}
 
-		sessionID, err := db.UpdateSessionID(username)
+		sessionID, err := db.UpdateSessionID(loginInfo.Username)
 		if err != nil {
 			fmt.Println("Nem sikerült a sessionID update, bár ez nem tudom miért baj ")
 		}

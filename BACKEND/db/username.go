@@ -5,16 +5,18 @@ import (
 )
 
 func GetUsernameAvailable(username string) bool {
+	println(username)
 	// var user models.User
+	var asd string
 	rows, err := Db.Query("SELECT `Name` FROM `Users` WHERE `Name` = ?;", username)
 	if err != nil {
 		return false
 	}
 	for rows.Next() {
-		rows.Scan(&username)
+		rows.Scan(&asd)
 	}
-	println(username)
-	return false
+	println(asd)
+	return asd == ""
 }
 
 func GetUserBySessionID(sessionID string) (string, error) {
