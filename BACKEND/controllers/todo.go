@@ -3,30 +3,35 @@ package controllers
 import (
 	"ToDo/db"
 	"ToDo/models"
-	"ToDo/utils"
+	"fmt"
 	"net/http"
 )
 
 func ToDo_Controller(w http.ResponseWriter, r *http.Request) {
-	// Get SessionID from header
-	SessionID := r.Header.Get("sessionID")
-	// Validate SessionID
-	if !utils.ValidateSessionID(SessionID) {
-		http.Error(w, "Invalid sessionID", http.StatusForbidden)
-		return
-	}
-	// Get UserID by SessionID
-	userID, err := db.GetUserIDBySessionID(SessionID)
-	if err != nil {
-		http.Error(w, "Invalid sessionID", http.StatusForbidden)
-		return
-	}
+	// var SessionID models.SessionInfo
+
+	// // Decode the request body into the SessionInfo instance
+	// DecodeRequest(w, r, &SessionID)
+
+	// // Validate SessionID
+	// if !utils.ValidateSessionID(SessionID.SessionID) {
+	// 	http.Error(w, "Invalid sessionID", http.StatusForbidden)
+	// 	return
+	// }
+	// // Get UserID by SessionID
+	// userID, err := db.GetUserIDBySessionID(SessionID.SessionID)
+	// if err != nil {
+	// 	http.Error(w, "Invalid sessionID", http.StatusForbidden)
+	// 	return
+	// }
+
+	//
 	switch r.Method {
 
 	case http.MethodGet:
-
+		// sima item
 		// Get todos by username
-		result, err := db.GetToDosFromDB(userID)
+		result, err := db.GetToDosFromDB(0)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -34,16 +39,58 @@ func ToDo_Controller(w http.ResponseWriter, r *http.Request) {
 		SendResponse(w, result)
 
 	case http.MethodPost:
-		var request models.TodoEditor
+		/*
+
+			{
+				"session" : { "sessionID" : ""},
+				"todo" : {
+					"userID" : "NULL",
+					"name" : "",
+					"description" : "",
+					"priority" : "",
+					"done" : "",
+					"deadline" : ""
+				}
+			}
+
+		*/
+		var Todo models.TodoEditor `json:"todo"`
+
+		// var valami struct {
+		// 	Session models.SessionInfo `json:"session"`
+		// 	Todo    models.TodoEditor  `json:"todo"`
+		// }
+
+		fmt.Println(Todo.UserID)
+		fmt.Println(Todo.Name)
+		fmt.Println(Todo.Description)
+		fmt.Println(Todo.Priority)
+		fmt.Println(Todo.Done)
+		fmt.Println(Todo.Deadline)
 
 		// Validate data
-		if DecodeRequest(w, r, &request) {
+		if !DecodeRequest(w, r, &Todo) {
 			return
 		}
-		request.UserID = userID
+
+		fmt.Println(Todo.UserID)
+		fmt.Println(Todo.Name)
+		fmt.Println(Todo.Description)
+		fmt.Println(Todo.Priority)
+		fmt.Println(Todo.Done)
+		fmt.Println(Todo.Deadline)
+
+		Todo.UserID = 3
+
+		fmt.Println(Todo.UserID)
+		fmt.Println(Todo.Name)
+		fmt.Println(Todo.Description)
+		fmt.Println(Todo.Priority)
+		fmt.Println(Todo.Done)
+		fmt.Println(Todo.Deadline)
 
 		//
-		id, err := db.CreateToDo(request)
+		id, err := db.CreateToDo(Todo)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}

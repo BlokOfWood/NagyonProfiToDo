@@ -22,12 +22,10 @@ type Todo struct {
 }
 
 type TodoEditor struct {
-	ToDoID      uint         `json:"toDoID"`
 	UserID      uint         `json:"userID"`
 	Name        string       `json:"name"`
 	Description string       `json:"description"`
 	Priority    PriorityEnum `json:"priority"`
 	Done        bool         `json:"done"`
 	Deadline    string       `json:"deadline"`
-	CreatedAt   string       `json:"createdAt"`
 }
