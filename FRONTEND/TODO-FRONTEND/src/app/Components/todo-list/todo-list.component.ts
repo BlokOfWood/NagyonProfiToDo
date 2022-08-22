@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DebugElement, OnInit } from '@angular/core';
 import { TaskPriority, TodoItem } from 'src/app/interfaces';
+
+interface TodoItemDictionary{
+  [todoId: number] : TodoItem;
+}
 
 @Component({
   selector: 'app-todo-list',
@@ -28,10 +32,25 @@ export class TodoListComponent implements OnInit {
     }
   ];
 
+  listOfTasksDictionary: TodoItemDictionary = {};
+
   constructor() { }
 
   ngOnInit(): void {
-
+    this.generateDictonaryFromTodoItemList(this.listOfTasks)
   }
 
+  generateDictonaryFromTodoItemList(todoItemList: TodoItem[]) {
+    todoItemList.forEach(task => {
+      this.listOfTasksDictionary[task.taskID] = task;
+    })
+  }
+
+  markTaskAsDone(id: number): void {
+    this.listOfTasksDictionary[id].taskDone = true;
+  }
+
+  markTaskAsUndone(id: number): void {
+    this.listOfTasksDictionary[id].taskDone = false;
+  }
 }
