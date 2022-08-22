@@ -1,10 +1,10 @@
 <div id="task-list-container">
     <ul class="task-list">
-        <li class="task-item" *ngFor="let task of listOfTasksDictionary | keyvalue">
-            <span class="task-name" [ngClass]="{'task-done-item': task.value.taskDone}">{{task.value.taskName}}</span>
+        <li class="task-item" *ngFor="let todoItem of todoItemsDictionary | keyvalue">
+            <span class="task-name" [ngClass]="{'task-done-item': todoItem.value.taskDone}">{{todoItem.value.taskName}}</span>
 
-            <button *ngIf="task.value.taskDone" id="task-done-button" (click)="markTaskAsUndone(task.value.taskID)"><i class="fa-solid fa-check"></i></button>
-            <button *ngIf="!task.value.taskDone" id="task-done-button" (click)="markTaskAsDone(task.value.taskID)"><i class="fa-solid fa-xmark"></i></button>
+            <button *ngIf="todoItem.value.taskDone" id="task-done-button" (click)="markTaskAsUndone(todoItem.value.taskID)"><i class="fa-solid fa-check"></i></button>
+            <button *ngIf="!todoItem.value.taskDone" id="task-done-button" (click)="markTaskAsDone(todoItem.value.taskID)"><i class="fa-solid fa-xmark"></i></button>
 
             <button id="task-expand-button"><i class="fa-solid fa-angle-down"></i></button>
         </li>

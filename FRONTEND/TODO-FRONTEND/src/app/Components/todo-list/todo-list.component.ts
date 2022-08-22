@@ -11,7 +11,7 @@ interface TodoItemDictionary{
   styleUrls: ['./todo-list.component.scss']
 })
 export class TodoListComponent implements OnInit {
-  listOfTasks: TodoItem[] = [
+  listOfTodoItems: TodoItem[] = [
     {
       taskCreatedAt:new Date(), 
       taskDeadline: new Date(), 
@@ -32,25 +32,25 @@ export class TodoListComponent implements OnInit {
     }
   ];
 
-  listOfTasksDictionary: TodoItemDictionary = {};
+  todoItemsDictionary: TodoItemDictionary = {};
 
   constructor() { }
 
   ngOnInit(): void {
-    this.generateDictonaryFromTodoItemList(this.listOfTasks)
+    this.generateDictonaryFromTodoItemList(this.listOfTodoItems)
   }
 
   generateDictonaryFromTodoItemList(todoItemList: TodoItem[]) {
     todoItemList.forEach(task => {
-      this.listOfTasksDictionary[task.taskID] = task;
+      this.todoItemsDictionary[task.taskID] = task;
     })
   }
 
   markTaskAsDone(id: number): void {
-    this.listOfTasksDictionary[id].taskDone = true;
+    this.todoItemsDictionary[id].taskDone = true;
   }
 
   markTaskAsUndone(id: number): void {
-    this.listOfTasksDictionary[id].taskDone = false;
+    this.todoItemsDictionary[id].taskDone = false;
   }
 }

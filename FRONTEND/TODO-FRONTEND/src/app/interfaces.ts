@@ -17,7 +17,7 @@ export interface TodoItem {
 }
 
 export interface TasksResponse {
-    taskList : TodoItem[]
+    todoItemList : TodoItem[]
 }
 
 export interface LoginInfo {
