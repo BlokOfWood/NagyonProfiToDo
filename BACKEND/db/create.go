@@ -18,7 +18,7 @@ func CreateUser(username *string, email *string, password *string) bool {
 	return err == nil
 }
 
-func CreateToDoItem(editor models.TodoItemEditor) (int64, error) {
+func CreateToDo(editor models.TodoEditor) (int64, error) {
 
 	filas, err := Db.Exec("INSERT INTO `ToDos`(`UserID`,`Name`,`Description`,`Priority`,`Done`,`Deadline`) VALUES(?,?,?,?,?,?);",
 		editor.UserID,
@@ -27,7 +27,6 @@ func CreateToDoItem(editor models.TodoItemEditor) (int64, error) {
 		editor.Priority,
 		editor.Done,
 		editor.Deadline)
-
 	if err != nil {
 		return 0, err
 	}

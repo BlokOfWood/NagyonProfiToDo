@@ -9,19 +9,22 @@ import (
 )
 
 func ToDo_Controller(w http.ResponseWriter, r *http.Request) {
+	// Get SessionID from header
+	SessionID := r.Header.Get("sessionID")
+	// Validate SessionID
+	if !utils.ValidateSessionID(SessionID) {
+		fmt.Println("Invalid sessionID")
+		http.Redirect(w, r, "/login", http.StatusForbidden)
+	}
+	var err error
 	switch r.Method {
 
 	case http.MethodGet:
-		// Get SessionID from header
-		SessionID := r.Header.Get("sessionID")
-		// Validate SessionID
-		if !utils.ValidateSessionID(SessionID) {
-			fmt.Println("Invalid sessionID")
-			http.Error(w, "Invalid sessionID", http.StatusNotAcceptable)
-		}
-
 		// Get username by SessionID
-		username := db.GetUserBySessionID(SessionID)
+		username, err := db.GetUserBySessionID(SessionID)
+		if err != nil {
+			http.Redirect(w, r, "/login", http.StatusForbidden)
+		}
 		// Get todos by username
 		result, err := db.GetToDosFromDB(username)
 		if err != nil {
@@ -36,6 +39,14 @@ func ToDo_Controller(w http.ResponseWriter, r *http.Request) {
 		if DecodeRequest(w, r, &request) {
 			return
 		}
+
+		//
+		request.UserID, err = db.GetUserIDBySessionID(SessionID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		//
 		id, err := db.CreateToDo(request)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
