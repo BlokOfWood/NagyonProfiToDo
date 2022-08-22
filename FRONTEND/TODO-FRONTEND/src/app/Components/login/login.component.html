@@ -1,1 +1,8 @@
-<p>login works!</p>
+<div>
+    <form [formGroup]="formGroup">
+        <input type="text" formControlName="username">
+        <input type="password" formControlName="password">
+        <button (click)="loginAttempt()">login</button>
+        <h1>{{apiService.sessionID}}</h1>
+    </form>
+</div>

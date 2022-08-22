@@ -30,3 +30,7 @@ export interface RegistrationInfo {
     email : string
     password : string
 }
+
+export interface SessionIdResponse{
+    sessionID : string
+}
