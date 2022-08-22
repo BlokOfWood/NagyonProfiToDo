@@ -7,11 +7,11 @@ export enum TaskPriority{
 }
 
 export interface TodoItem {
-    taskID : Number
-    taskName : String
-    taskText : String
+    taskID : number
+    taskName : string
+    taskText : string
     taskPriority : TaskPriority
-    taskDone : Boolean
+    taskDone : boolean
     taskDeadline : Date
     taskCreatedAt : Date
 }
