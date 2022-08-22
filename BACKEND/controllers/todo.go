@@ -21,12 +21,12 @@ func ToDo_Controller(w http.ResponseWriter, r *http.Request) {
 
 	case http.MethodGet:
 		// Get username by SessionID
-		username, err := db.GetUserBySessionID(SessionID)
+		userID, err := db.GetUserIDBySessionID(SessionID)
 		if err != nil {
 			http.Redirect(w, r, "/login", http.StatusForbidden)
 		}
 		// Get todos by username
-		result, err := db.GetToDosFromDB(username)
+		result, err := db.GetToDosFromDB(userID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}

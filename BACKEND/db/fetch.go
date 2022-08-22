@@ -38,11 +38,11 @@ func GetHashFromDB(username string) (string, error) {
 	return result, nil
 }
 
-func GetToDosFromDB(username string) ([]models.Todo, error) {
+func GetToDosFromDB(userID uint) ([]models.Todo, error) {
 	result := make([]models.Todo, 0)
 
 	// SELECT * FROM Users WHERE Username
-	rows, err := Db.Query("SELECT * FROM `Users` WHERE `Name`=? ;", username)
+	rows, err := Db.Query("SELECT * FROM `todos` WHERE `UserID`=? ;", userID)
 	if err != nil {
 		return nil, err
 	}
