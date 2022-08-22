@@ -6,7 +6,7 @@ export enum TaskPriority{
     EVENTUALLY = 4,
 }
 
-export interface Task {
+export interface TodoItem {
     taskID : Number
     taskName : String
     taskText : String
@@ -17,7 +17,7 @@ export interface Task {
 }
 
 export interface TasksResponse {
-    taskList : Task[]
+    taskList : TodoItem[]
 }
 
 export interface LoginInfo {
