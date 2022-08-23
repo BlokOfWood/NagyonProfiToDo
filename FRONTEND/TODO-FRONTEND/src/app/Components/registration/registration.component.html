@@ -1,1 +1,24 @@
-<p>registration works!</p>
+<form [formGroup]="formGroup">
+
+    <span class="form-label">Username </span>
+    <input type="text" formControlName="username" required>
+
+    <span class="form-label">Email </span>
+    <input type="email" formControlName="email" required>
+
+    <div *ngIf="email?.invalid && (email?.touched)">
+        <div *ngIf="email?.errors?.['required']" class="form-label form-validation-error">
+            Email cannot be empty.
+        </div>
+        <div *ngIf="email?.errors?.['email']" class="form-label form-validation-error">
+            Invalid email address.
+        </div>
+    </div>
+    <span class="form-label">Password </span>
+    <input type="password" formControlName="password" required>
+
+    <span class="form-label">Repeat Password</span>
+    <input type="password" formControlName="repeatedPassword" required>
+
+    <button (click)="registerAttempt()">register</button>
+</form>

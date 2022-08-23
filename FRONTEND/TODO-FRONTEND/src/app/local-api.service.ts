@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { LoginInfo, TaskPriority, TodoEditor, TodoItem } from './interfaces';
+import { LoginInfo, RegistrationInfo, TaskPriority, TodoEditor, TodoItem } from './interfaces';
 import { APIFunctions } from './request-helper';
 
 @Injectable({
@@ -16,6 +16,17 @@ export class LocalApiService {
       subscriber => {
         this.apiFunctions.post('login', loginInfo).subscribe(sessionIDResponse => {
           localStorage.setItem('sessionID', JSON.parse(sessionIDResponse).sessionID)
+          subscriber.next()
+          subscriber.complete()
+        })
+      }
+    );
+  }
+
+  attemptRegister(registrationInfo: RegistrationInfo): Observable<void> {
+    return new Observable<void>(
+      subscriber => {
+        this.apiFunctions.post('register', registrationInfo).subscribe(sessionIDResponse => {
           subscriber.next()
           subscriber.complete()
         })
