@@ -1,0 +1,12 @@
+<div id="todo-list-container">
+    <ul class="todo-list">
+        <li class="todo-item" *ngFor="let todoItem of todoItemsDictionary | keyvalue">
+            <span class="todo-name" [ngClass]="{'todo-done-item': todoItem.value.done}">{{todoItem.value.name}}</span>
+
+            <button *ngIf="todoItem.value.done" id="todo-done-button" (click)="markTaskAsUndone(todoItem.value.todoID)"><i class="fa-solid fa-check"></i></button>
+            <button *ngIf="!todoItem.value.done" id="todo-done-button" (click)="markTaskAsDone(todoItem.value.todoID)"><i class="fa-solid fa-xmark"></i></button>
+
+            <button id="todo-expand-button"><i class="fa-solid fa-angle-down"></i></button>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,39 @@
+$button-size: 30px;
+
+#todo-list-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .todo-list {
+        list-style: none;
+        margin: 20px;
+        padding: 0;
+
+        width: 100%;
+        max-width: 1000px;
+
+        .todo-item {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 8fr auto auto;
+
+            .todo-name {
+                font-size: 30px;
+            }
+
+            #todo-done-button,
+            #todo-expand-button {
+                width: $button-size;
+                height: $button-size;
+                margin: 5px;
+            }
+        }
+
+        
+    }
+}
+
+.todo-done-item{
+    text-decoration: line-through;
+}
