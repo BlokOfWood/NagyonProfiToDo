@@ -1,9 +1,9 @@
 export enum TaskPriority{
-    CRITICAL = 0,
-    URGENT = 1,
-    IMPORTANT = 2,
-    NORMAL = 3,
-    EVENTUALLY = 4,
+    CRITICAL = "Critical",
+    URGENT = "Urgent",
+    IMPORTANT = "Important",
+    NORMAL = "Normal",
+    EVENTUALLY = "Eventually",
 }
 
 export interface TodoItem {
