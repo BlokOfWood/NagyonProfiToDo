@@ -1,0 +1,21 @@
+nav {
+    height: 50px;
+    padding: 0 40px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: aquamarine;
+
+    .spacer{
+        width: 650px;
+    }
+
+    a {
+        font-size: 20px;
+        text-decoration: none;
+        color: black;
+    }
+}
