@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { LoginInfo } from 'src/app/interfaces';
 import { LocalApiService } from '../../local-api.service';
 
@@ -16,7 +17,8 @@ export class LoginComponent implements OnInit {
 
 
   constructor(
-    public apiService: LocalApiService
+    private apiService: LocalApiService,
+    private router: Router
   ) { 
 
   }
@@ -27,7 +29,10 @@ export class LoginComponent implements OnInit {
   loginAttempt(): void {
     const loginInfo: LoginInfo = this.formGroup.value;
 
-    this.apiService.attemptLogin(loginInfo)
+    this.apiService.attemptLogin(loginInfo).subscribe(() => {
+      console.log('login successful');
+      this.router.navigate(['todolist']);
+    })
   }
 
 }

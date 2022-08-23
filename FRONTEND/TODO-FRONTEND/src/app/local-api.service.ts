@@ -11,10 +11,16 @@ export class LocalApiService {
 
   constructor() { }
 
-  attemptLogin(loginInfo: LoginInfo): void {
-    this.apiFunctions.post('login', loginInfo).subscribe(sessionIDResponse => {
-      localStorage.setItem('sessionID', JSON.parse(sessionIDResponse).sessionID)
-    })
+  attemptLogin(loginInfo: LoginInfo): Observable<void> {
+    return new Observable<void>(
+      subscriber => {
+        this.apiFunctions.post('login', loginInfo).subscribe(sessionIDResponse => {
+          localStorage.setItem('sessionID', JSON.parse(sessionIDResponse).sessionID)
+          subscriber.next()
+          subscriber.complete()
+        })
+      }
+    );
   }
 
   getTodoItems(): Observable<TodoItem[]> {
