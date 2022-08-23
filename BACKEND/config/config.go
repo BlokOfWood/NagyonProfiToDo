@@ -1,9 +1,11 @@
 package config
 
 import (
+	"fmt"
+	"log"
 	"os"
 
-	models "ToDo/models"
+	"Todo/models"
 
 	"github.com/joho/godotenv"
 )
@@ -11,12 +13,8 @@ import (
 func LoadEnv(databaseParams *models.DatabaseParams) {
 	err := godotenv.Load(".env")
 	if err != nil {
-		databaseParams.Driver = "mysql"
-		databaseParams.Username = "MarijuanaPepsiJackson"
-		databaseParams.Password = "Beezow Doo-Doo Zopittybop-Bop-Bop"
-		databaseParams.Database = "todoapp"
-		databaseParams.Address = ""
-		// log.Fatal(err)
+		fmt.Println("fataaaaaal error")
+		log.Fatal(err)
 		return
 	}
 	// database

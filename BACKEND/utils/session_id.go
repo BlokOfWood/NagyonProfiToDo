@@ -22,7 +22,3 @@ func GenerateSessionID() string {
 	}
 	return string(sessionID)
 }
-
-func ValidateSessionID(sessionID string) bool {
-	return len(sessionID) == 16
-}

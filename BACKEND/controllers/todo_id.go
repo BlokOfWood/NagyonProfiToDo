@@ -1,13 +1,13 @@
 package controllers
 
 import (
-	"ToDo/db"
-	"ToDo/models"
-	"ToDo/utils"
+	"Todo/db"
+	"Todo/models"
+	"Todo/utils"
 	"net/http"
 )
 
-func ToDoID_Controller(w http.ResponseWriter, r *http.Request) {
+func TodoID_Controller(w http.ResponseWriter, r *http.Request) {
 	var SessionID models.SessionInfo
 
 	// Decode the request body into the SessionInfo instance
@@ -28,6 +28,13 @@ func ToDoID_Controller(w http.ResponseWriter, r *http.Request) {
 	// switch r.Method {
 
 	// case http.MethodGet:
+
+	// if rows.Next() {
+	// 	rows.Scan(&result.Text, &result.Done, &result.Description)
+	// } else {
+	// 	return nil, errors.New("item not found")
+	// }
+
 	// 	// Get todos by username
 	// 	result, err := db.GetToDoFromDB(userID)
 	// 	if err != nil {

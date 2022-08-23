@@ -1,8 +1,8 @@
 package db
 
 import (
-	"ToDo/models"
-	"ToDo/utils"
+	"Todo/models"
+	"Todo/utils"
 )
 
 func CreateUser(registrationInfo *models.RegistrationInfo) bool {
@@ -18,10 +18,10 @@ func CreateUser(registrationInfo *models.RegistrationInfo) bool {
 	return err == nil
 }
 
-func CreateToDo(editor models.TodoEditor) (int64, error) {
+func CreateTodo(editor models.TodoEditor, userID uint) (int64, error) {
 
-	filas, err := Db.Exec("INSERT INTO `ToDos`(`UserID`,`Name`,`Description`,`Priority`,`Done`,`Deadline`) VALUES(?,?,?,?,?,?);",
-		editor.UserID,
+	filas, err := Db.Exec("INSERT INTO `Todos`(`UserID`,`Name`,`Description`,`Priority`,`Done`,`Deadline`) VALUES(?,?,?,?,?,?);",
+		userID,
 		editor.Name,
 		editor.Description,
 		editor.Priority,

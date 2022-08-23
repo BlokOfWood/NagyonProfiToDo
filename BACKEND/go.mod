@@ -1,4 +1,4 @@
-module ToDo
+module Todo
 
 go 1.18
 

@@ -1,18 +1,17 @@
 package models
 
-type PriorityEnum byte
+type PriorityEnum string
 
 const (
-	Critical   PriorityEnum = 0
-	Urgent     PriorityEnum = 1
-	Important  PriorityEnum = 2
-	Normal     PriorityEnum = 3
-	Eventually PriorityEnum = 4
+	Critical   PriorityEnum = "Critical"
+	Urgent     PriorityEnum = "Urgent"
+	Important  PriorityEnum = "Important"
+	Normal     PriorityEnum = "Normal"
+	Eventually PriorityEnum = "Eventually"
 )
 
 type Todo struct {
-	ToDoID      uint         `json:"toDoID"`
-	UserID      uint         `json:"userID"`
+	TodoID      uint         `json:"todoID"`
 	Name        string       `json:"name"`
 	Description string       `json:"description"`
 	Priority    PriorityEnum `json:"priority"`
@@ -22,7 +21,6 @@ type Todo struct {
 }
 
 type TodoEditor struct {
-	UserID      uint         `json:"userID"`
 	Name        string       `json:"name"`
 	Description string       `json:"description"`
 	Priority    PriorityEnum `json:"priority"`

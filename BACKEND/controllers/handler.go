@@ -46,6 +46,10 @@ func DecodeRequest(w http.ResponseWriter, r *http.Request, input any) bool {
 	return true
 }
 
+func DecodeSessionID(r *http.Request) string {
+	return r.Header.Get("sessionID")
+}
+
 func SendResponseW(w http.ResponseWriter, i any, wrapper ...string) {
 	data, err := json.Marshal(i)
 	if err != nil {

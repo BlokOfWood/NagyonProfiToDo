@@ -1,12 +1,13 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
 
-	"ToDo/controllers"
-	"ToDo/db"
+	"Todo/controllers"
+	"Todo/db"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/handlers"
@@ -14,6 +15,23 @@ import (
 )
 
 var Address string = "0.0.0.0:4000"
+
+const (
+	defaultAddress string = "0.0.0.0"
+	defaultPort    int    = 4000
+)
+
+var (
+	address string
+	port    int
+)
+
+func LoadFlags() string {
+	flag.StringVar(&address, "address", defaultAddress, "Server's Address")
+	flag.IntVar(&port, "port", defaultPort, "Server's Port")
+	flag.Parse()
+	return fmt.Sprintf("%s:%d", address, port)
+}
 
 func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -24,6 +42,7 @@ func Middleware(next http.Handler) http.Handler {
 }
 
 func main() {
+	Address = LoadFlags()
 	mux := mux.NewRouter()
 	fmt.Println("Connecting to database")
 	db.ConnectDatabase()
@@ -33,8 +52,8 @@ func main() {
 	origins := handlers.AllowedOrigins([]string{"*"})
 	// origins := handlers.AllowedOrigins([]string{"localhost:4000"})
 
-	mux.HandleFunc("/todos", controllers.ToDo_Controller).Methods("GET", "POST")
-	mux.HandleFunc("/todos/{id:[0-9]+}", controllers.ToDoID_Controller).Methods("GET", "PATCH", "DELETE")
+	mux.HandleFunc("/todos", controllers.Todo_Controller).Methods("GET", "POST")
+	mux.HandleFunc("/todos/{id:[0-9]+}", controllers.TodoID_Controller).Methods("GET", "PATCH", "DELETE")
 	mux.HandleFunc("/login", controllers.Login_Controller).Methods("GET", "POST")
 	mux.HandleFunc("/register", controllers.Register_Controller).Methods("GET", "POST")
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

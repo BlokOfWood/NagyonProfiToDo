@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"ToDo/db"
-	"ToDo/models"
+	"Todo/db"
+	"Todo/models"
 	"net/http"
 )
 

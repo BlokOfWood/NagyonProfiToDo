@@ -1,97 +1,78 @@
 package controllers
 
 import (
-	"ToDo/db"
-	"ToDo/models"
+	"Todo/db"
+	"Todo/models"
+	"Todo/utils"
 	"fmt"
 	"net/http"
 )
 
-func ToDo_Controller(w http.ResponseWriter, r *http.Request) {
-	// var SessionID models.SessionInfo
+func Todo_Controller(w http.ResponseWriter, r *http.Request) {
 
-	// // Decode the request body into the SessionInfo instance
-	// DecodeRequest(w, r, &SessionID)
+	// Get SessionID from request header
+	sessionID := DecodeSessionID(r)
 
-	// // Validate SessionID
-	// if !utils.ValidateSessionID(SessionID.SessionID) {
-	// 	http.Error(w, "Invalid sessionID", http.StatusForbidden)
-	// 	return
-	// }
-	// // Get UserID by SessionID
-	// userID, err := db.GetUserIDBySessionID(SessionID.SessionID)
-	// if err != nil {
-	// 	http.Error(w, "Invalid sessionID", http.StatusForbidden)
-	// 	return
-	// }
+	fmt.Println("SessionID: ", sessionID)
+
+	// Validate SessionID
+	if !utils.ValidateSessionID(sessionID) {
+		fmt.Println("Validate sessionID failed")
+		http.Error(w, "Validate sessionID failed", http.StatusForbidden)
+		return
+	}
+
+	// Get UserID by SessionID
+	userID, err := db.GetUserIDBySessionID(sessionID)
+	if err != nil {
+		fmt.Println("Get UserID by SessionID failed")
+		http.Error(w, "Get UserID by SessionID failed", http.StatusForbidden)
+		return
+	}
 
 	//
 	switch r.Method {
 
 	case http.MethodGet:
-		// sima item
+
 		// Get todos by username
-		result, err := db.GetToDosFromDB(0)
+		result, err := db.GetTodosFromDB(userID)
 		if err != nil {
+			fmt.Println("Get User by userID failed")
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
+
 		// Send response back
 		SendResponse(w, result)
 
 	case http.MethodPost:
-		/*
 
-			{
-				"session" : { "sessionID" : ""},
-				"todo" : {
-					"userID" : "NULL",
-					"name" : "",
-					"description" : "",
-					"priority" : "",
-					"done" : "",
-					"deadline" : ""
-				}
-			}
-
-		*/
-		var Todo models.TodoEditor `json:"todo"`
-
-		// var valami struct {
-		// 	Session models.SessionInfo `json:"session"`
-		// 	Todo    models.TodoEditor  `json:"todo"`
-		// }
-
-		fmt.Println(Todo.UserID)
-		fmt.Println(Todo.Name)
-		fmt.Println(Todo.Description)
-		fmt.Println(Todo.Priority)
-		fmt.Println(Todo.Done)
-		fmt.Println(Todo.Deadline)
+		var Todo models.TodoEditor
 
 		// Validate data
 		if !DecodeRequest(w, r, &Todo) {
+			fmt.Println("DecodeRequest failed")
+			http.Error(w, "DecodeRequest failed", http.StatusBadRequest)
 			return
 		}
 
-		fmt.Println(Todo.UserID)
-		fmt.Println(Todo.Name)
-		fmt.Println(Todo.Description)
-		fmt.Println(Todo.Priority)
-		fmt.Println(Todo.Done)
-		fmt.Println(Todo.Deadline)
+		// Check date format
+		asd, err := utils.ValidateDate(Todo.Deadline)
+		println(asd)
+		if err != nil {
+			fmt.Println("ValidateDate failed")
+			http.Error(w, "ValidateDate failed", http.StatusBadRequest)
+			return
+		}
 
-		Todo.UserID = 3
-
-		fmt.Println(Todo.UserID)
-		fmt.Println(Todo.Name)
-		fmt.Println(Todo.Description)
-		fmt.Println(Todo.Priority)
-		fmt.Println(Todo.Done)
-		fmt.Println(Todo.Deadline)
+		Todo.Deadline = asd
 
 		//
-		id, err := db.CreateToDo(Todo)
+		id, err := db.CreateTodo(Todo, userID)
 		if err != nil {
+			fmt.Println("CreateTodo failed")
+			fmt.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		SendResponse(w, id)

@@ -1,8 +1,9 @@
 package db
 
 import (
-	"ToDo/config"
-	"ToDo/models"
+	"Todo/config"
+	"Todo/models"
+
 	"database/sql"
 	"fmt"
 	"log"

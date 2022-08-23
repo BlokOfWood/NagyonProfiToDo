@@ -1,7 +1,7 @@
 package db
 
 import (
-	"ToDo/utils"
+	"Todo/utils"
 )
 
 func UpdateSessionID(username string) (string, error) {

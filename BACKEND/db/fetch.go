@@ -1,7 +1,8 @@
 package db
 
 import (
-	"ToDo/models"
+	"Todo/models"
+	"fmt"
 )
 
 func GetSaltFromDB(username string) (string, error) {
@@ -38,40 +39,29 @@ func GetHashFromDB(username string) (string, error) {
 	return result, nil
 }
 
-func GetToDosFromDB(userID uint) ([]models.Todo, error) {
+func GetTodosFromDB(userID uint) ([]models.Todo, error) {
 	result := make([]models.Todo, 0)
 
 	// SELECT * FROM Users WHERE Username
-	rows, err := Db.Query("SELECT * FROM `todos` WHERE `UserID`=? ;", userID)
+	rows, err := Db.Query("SELECT `TodoID`,`Name`,`Description`,`Priority`,`Done`,`Deadline`,`CreatedAt` FROM `todos` WHERE `UserID`=? ;", userID)
+
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 	defer rows.Close()
 
 	var item models.Todo
+
 	for rows.Next() {
-		rows.Scan(&item)
+
+		err := rows.Scan(&item.TodoID, &item.Name, &item.Description, &item.Priority, &item.Done, &item.Deadline, &item.CreatedAt)
+		if err != nil {
+			fmt.Println("Reading error:", err)
+			return nil, err
+		}
 		result = append(result, item)
 	}
 
 	return result, nil
 }
-
-// func GetTaskFromDB(username string, id int) (*models.TodoItemEditor, error) {
-// 	result := &models.TodoItemEditor{}
-
-// 	// SELECT * FROM Users WHERE Username
-// 	rows, err := Db.Query("SELECT * FROM `Users` WHERE `Name`=?  AND `Task`;", username)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	defer rows.Close()
-
-// 	var item models.TodoItem
-// 	for rows.Next() {
-// 		rows.Scan(&item)
-// 		result = append(result, item)
-// 	}
-
-// 	return result, nil
-// }
