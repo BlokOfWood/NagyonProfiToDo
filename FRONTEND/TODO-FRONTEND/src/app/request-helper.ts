@@ -1,25 +1,24 @@
 import { Observable } from "rxjs";
 
 export class APIFunctions {
-    apiAddress: string = "";
-    sessionID: string = "";
+    private apiAddress: string = "";
 
-    constructor(_apiAddress: string, _sessionID: string = "") {
+    constructor(_apiAddress: string) {
         this.apiAddress = _apiAddress
         if (!this.apiAddress.endsWith('/')) {
             this.apiAddress += '/';
         }
-
-        this.sessionID = _sessionID;
     }
 
     constructAddress = (endpoint: string) => this.apiAddress + endpoint;
 
     get(endpoint: string, headers: Headers = new Headers()): Observable<string> {
-        var requestAddress = this.constructAddress(endpoint)
+        let sessionID = localStorage.getItem('sessionID')
 
-        if (this.sessionID != "" && headers.get('sessionID') == null)
-            headers.append('sessionID', this.sessionID);
+        if (sessionID !== null && headers.get('sessionID') == null)
+            headers.append('sessionID', sessionID);
+
+        const requestAddress = this.constructAddress(endpoint)
 
         var requestOptions = {
             method: 'GET',
@@ -30,6 +29,7 @@ export class APIFunctions {
             fetch(requestAddress, requestOptions)
                 .then(response => response.text().then(x => {
                     if (response.status === 200) {
+                        console.log(x)
                         subscriber.next(x)
                         subscriber.complete();
                     }
@@ -43,11 +43,17 @@ export class APIFunctions {
         return observable;
     }
 
-    post(endpoint: string, body: any, headers: Headers = new Headers()): Observable<string> {
+    post(endpoint: string, body: any, headers: Headers = new Headers()): Observable<string> {    
+        let sessionID = localStorage.getItem('sessionID')
+
+        if (sessionID !== null && headers.get('sessionID') == null)
+            headers.append('sessionID', sessionID);
+
         const requestAddress = this.constructAddress(endpoint)
 
         headers.append("Content-Type", "application/json");
 
+        console.log(JSON.stringify(body))
         var requestOptions = {
             body: JSON.stringify(body),
             method: 'POST',

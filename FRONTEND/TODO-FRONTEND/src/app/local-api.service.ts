@@ -1,22 +1,27 @@
 import { Injectable } from '@angular/core';
-import { from, Observable } from 'rxjs';
-import { LoginInfo } from './interfaces';
+import { map, Observable } from 'rxjs';
+import { LoginInfo, TaskPriority, TodoEditor, TodoItem } from './interfaces';
 import { APIFunctions } from './request-helper';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalApiService {
-  sessionID: string = "";
   apiFunctions: APIFunctions = new APIFunctions("http://81.182.202.18:4000/");
 
   constructor() { }
 
-  attemptLogin(loginInfo: LoginInfo): Observable<string> {
-    return this.apiFunctions.post('login', loginInfo)
+  attemptLogin(loginInfo: LoginInfo): void {
+    this.apiFunctions.post('login', loginInfo).subscribe(sessionIDResponse => {
+      localStorage.setItem('sessionID', JSON.parse(sessionIDResponse).sessionID)
+    })
   }
 
-  getTodoItems(): void {
-    APIFunctions 
+  getTodoItems(): Observable<TodoItem[]> {
+    return this.apiFunctions.get('todos', new Headers())
+      .pipe(map(todoItemList => {
+        console.log(todoItemList)
+        return JSON.parse(todoItemList)
+      }))
   }
 }
