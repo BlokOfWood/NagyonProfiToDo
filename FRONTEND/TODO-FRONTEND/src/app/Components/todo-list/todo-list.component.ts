@@ -1,5 +1,6 @@
 import { Component, DebugElement, OnInit } from '@angular/core';
 import { TaskPriority, TodoItem } from 'src/app/interfaces';
+import { LocalApiService } from 'src/app/local-api.service';
 
 interface TodoItemDictionary{
   [todoId: number] : TodoItem;
@@ -11,46 +12,32 @@ interface TodoItemDictionary{
   styleUrls: ['./todo-list.component.scss']
 })
 export class TodoListComponent implements OnInit {
-  listOfTodoItems: TodoItem[] = [
-    {
-      taskCreatedAt:new Date(), 
-      taskDeadline: new Date(), 
-      taskDone: true, 
-      taskID: 1, 
-      taskName: "asdasda", 
-      taskPriority: TaskPriority.CRITICAL, 
-      taskText:"as"
-    },
-    {
-      taskCreatedAt:new Date(), 
-      taskDeadline: new Date(), 
-      taskDone: false, 
-      taskID: 2, 
-      taskName: "asdasdaasdasd", 
-      taskPriority: TaskPriority.EVENTUALLY, 
-      taskText:"as"
-    }
-  ];
-
   todoItemsDictionary: TodoItemDictionary = {};
 
-  constructor() { }
+  constructor(
+    private apiService: LocalApiService
+    ) { 
+
+  }
 
   ngOnInit(): void {
-    this.generateDictonaryFromTodoItemList(this.listOfTodoItems)
+    this.apiService.getTodoItems().subscribe(todoItems => {
+      console.log(todoItems)
+      this.generateDictonaryFromTodoItemList(todoItems);
+    })
   }
 
   generateDictonaryFromTodoItemList(todoItemList: TodoItem[]) {
     todoItemList.forEach(task => {
-      this.todoItemsDictionary[task.taskID] = task;
+      this.todoItemsDictionary[task.todoID] = task;
     })
   }
 
   markTaskAsDone(id: number): void {
-    this.todoItemsDictionary[id].taskDone = true;
+    this.todoItemsDictionary[id].done = true;
   }
 
   markTaskAsUndone(id: number): void {
-    this.todoItemsDictionary[id].taskDone = false;
+    this.todoItemsDictionary[id].done = false;
   }
 }

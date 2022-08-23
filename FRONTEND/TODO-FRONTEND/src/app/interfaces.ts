@@ -7,13 +7,21 @@ export enum TaskPriority{
 }
 
 export interface TodoItem {
-    taskID : number
-    taskName : string
-    taskText : string
-    taskPriority : TaskPriority
-    taskDone : boolean
-    taskDeadline : Date
-    taskCreatedAt : Date
+    todoID : number
+    name : string
+    description : string
+    priority : TaskPriority
+    done : boolean
+    deadline : Date
+    createdAt : Date
+}
+
+export interface TodoEditor {
+    name : string
+    description : string
+    priority : TaskPriority
+    done : boolean
+    deadline : Date
 }
 
 export interface TasksResponse {
