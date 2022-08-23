@@ -20,7 +20,6 @@ export class LocalApiService {
   getTodoItems(): Observable<TodoItem[]> {
     return this.apiFunctions.get('todos', new Headers())
       .pipe(map(todoItemList => {
-        console.log(todoItemList)
         return JSON.parse(todoItemList)
       }))
   }

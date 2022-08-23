@@ -29,7 +29,6 @@ export class APIFunctions {
             fetch(requestAddress, requestOptions)
                 .then(response => response.text().then(x => {
                     if (response.status === 200) {
-                        console.log(x)
                         subscriber.next(x)
                         subscriber.complete();
                     }
