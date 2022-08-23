@@ -7,13 +7,15 @@ import { TodoListComponent } from './Components/todo-list/todo-list.component';
 import { RegistrationComponent } from './Components/registration/registration.component';
 import { LoginComponent } from './Components/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NavBarComponent } from './Components/nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TodoListComponent,
     RegistrationComponent,
-    LoginComponent
+    LoginComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,
