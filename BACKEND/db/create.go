@@ -3,6 +3,7 @@ package db
 import (
 	"Todo/models"
 	"Todo/utils"
+	"fmt"
 )
 
 func CreateUser(registrationInfo *models.RegistrationInfo) bool {
@@ -14,6 +15,11 @@ func CreateUser(registrationInfo *models.RegistrationInfo) bool {
 
 	// INSERT INTO
 	_, err := Db.Exec("INSERT INTO `Users`(`Name`,`Email`,`PasswordHash`,`Salt`) VALUES(?,?,?,?);", registrationInfo.Username, registrationInfo.Email, saltedHash, salt)
+
+	if err != nil {
+		fmt.Println("Failed to create user")
+		return false
+	}
 
 	return err == nil
 }
@@ -28,8 +34,8 @@ func CreateTodo(editor models.TodoEditor, userID uint) (int64, error) {
 		editor.Done,
 		editor.Deadline)
 	if err != nil {
+		fmt.Println("Failed to create TodoItem")
 		return 0, err
 	}
 	return filas.LastInsertId()
-
 }

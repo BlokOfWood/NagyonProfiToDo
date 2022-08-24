@@ -1,28 +1,33 @@
 package controllers
 
 import (
+	"Todo/db"
+	"Todo/utils"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
-// func CheckSessionID(w http.ResponseWriter, r *http.Request) bool {
-// 	var SessionID models.SessionInfo
+func CheckSessionID(w http.ResponseWriter, r *http.Request) uint {
+	// Get SessionID from request header
+	sessionID := DecodeSessionID(r)
+	var err error
 
-// 	// Decode the request body into the SessionInfo instance
-// 	DecodeRequest(w, r, &SessionID)
-
-// 	// Validate SessionID
-// 	if !utils.ValidateSessionID(SessionID.SessionID) {
-// 		http.Error(w, "Invalid sessionID", http.StatusForbidden)
-// 		return
-// 	}
-// 	// Get UserID by SessionID
-// 	userID, err := db.GetUserIDBySessionID(SessionID.SessionID)
-// 	if err != nil {
-// 		http.Error(w, "Invalid sessionID", http.StatusForbidden)
-// 		return
-// 	}
-// }
+	// Validate SessionID
+	if !utils.ValidateSessionID(sessionID) {
+		http.Error(w, "Validate sessionID failed", http.StatusForbidden)
+		return 0
+	}
+	fmt.Println("SessionID: ", sessionID)
+	// Get UserID by SessionID
+	userID, err := db.GetUserIDBySessionID(sessionID)
+	if err != nil {
+		fmt.Println("Error getting userID by sessionID")
+		http.Error(w, "Get UserID by SessionID failed", http.StatusForbidden)
+		return 0
+	}
+	return userID
+}
 
 func SendResponse(w http.ResponseWriter, input any) {
 	data, err := json.Marshal(input)

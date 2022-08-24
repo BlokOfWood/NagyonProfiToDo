@@ -24,7 +24,6 @@ CREATE TABLE `Todos` (
 DROP TABLE IF EXISTS `Users`;
 CREATE TABLE `Users` (
   `UserID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `SessionID` char(16) DEFAULT NULL,
   `Name` varchar(128) NOT NULL,
   `Email` varchar(128) NOT NULL,
   `PasswordHash` char(64) DEFAULT NULL,
@@ -33,12 +32,11 @@ CREATE TABLE `Users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `Sessions`;
-CREATE TABLE `Users` (
+CREATE TABLE `Sessions` (
   `UserID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `SessionID` char(16) DEFAULT NULL,
-  `Name` varchar(128) NOT NULL,
-  `Email` varchar(128) NOT NULL,
-  `PasswordHash` char(64) DEFAULT NULL,
-  `Salt` char(8) DEFAULT NULL,
-  PRIMARY KEY (`UserID`)
+  `Language` char(3) DEFAULT NULL,
+  `ExpirationDate` datetime NOT NULL,
+  PRIMARY KEY (`UserID`),
+  FOREIGN KEY (`UserID`) REFERENCES `Users` (`UserID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;

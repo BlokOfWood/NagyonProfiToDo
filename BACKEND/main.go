@@ -8,6 +8,7 @@ import (
 
 	"Todo/controllers"
 	"Todo/db"
+	"Todo/models"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/handlers"
@@ -60,6 +61,10 @@ func main() {
 	mux.HandleFunc("/register", controllers.Register_Controller).Methods("POST")
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Server is running"))
+	}).Methods("GET")
+	mux.HandleFunc("/cs", func(w http.ResponseWriter, r *http.Request) {
+		db.UpdateSessionItem(controllers.CheckSessionID(w, r), controllers.DecodeSessionID(r))
+		controllers.SendResponse(w, models.ResponseMessage{Message: "SessionID updated"})
 	}).Methods("GET")
 
 	mux.Use(Middleware)

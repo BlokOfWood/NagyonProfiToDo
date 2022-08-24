@@ -9,42 +9,26 @@ import (
 )
 
 func Todo_Controller(w http.ResponseWriter, r *http.Request) {
-
-	// Get SessionID from request header
-	sessionID := DecodeSessionID(r)
 	var err error
 
-	// Validate SessionID
-	if !utils.ValidateSessionID(sessionID) {
-		http.Error(w, "Validate sessionID failed", http.StatusForbidden)
-		return
-	}
-	fmt.Println("SessionID: ", sessionID)
-	// Get UserID by SessionID
-	userID, err := db.GetUserIDBySessionID(sessionID)
-	if err != nil {
-		fmt.Println("Error getting userID by sessionID")
-		http.Error(w, "Get UserID by SessionID failed", http.StatusForbidden)
-		return
-	}
+	// Get userID from sessionID and validate that.
+	userID := CheckSessionID(w, r)
 
-	//
 	switch r.Method {
 
 	case http.MethodGet:
-
-		// Get todos by username
+		// Get todos by userID
 		result, err := db.GetTodosFromDB(userID)
 		if err != nil {
 			fmt.Println("Get User by userID failed")
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
 		// Send response back
 		SendResponse(w, result)
 
 	case http.MethodPost:
-
 		var Todo models.TodoEditor
 
 		// Validate data
@@ -62,7 +46,7 @@ func Todo_Controller(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		//
+		//	Create a new TodoItem
 		id, err := db.CreateTodo(Todo, userID)
 		if err != nil {
 			fmt.Println("CreateTodo failed")
