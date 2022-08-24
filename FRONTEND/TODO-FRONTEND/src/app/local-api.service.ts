@@ -40,4 +40,15 @@ export class LocalApiService {
         return JSON.parse(todoItemList)
       }))
   }
+
+  updateTodoItem(): Observable<void> {
+    return new Observable<void>(
+      subscriber => {
+        this.apiFunctions.patch('todos', new Headers()).subscribe(() => {
+          subscriber.next()
+          subscriber.complete()
+        })
+      }
+    );
+  }
 }
