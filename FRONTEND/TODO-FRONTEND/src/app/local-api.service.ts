@@ -41,6 +41,25 @@ export class LocalApiService {
       }))
   }
 
+  createTodoItem(todoTitle: string): Observable<void> {
+    var todoEditor: TodoEditor = {
+      name: todoTitle,
+      priority: TaskPriority.NORMAL,
+      done: false,
+      description: "",
+      deadline: new Date(),
+    }
+
+    return new Observable<void>(
+      subscriber => {
+        this.apiFunctions.post('todos', todoEditor, new Headers()).subscribe(() => {
+          subscriber.next()
+          subscriber.complete()
+        })
+      }
+    );
+  }
+
   updateTodoItem(todoItem: TodoItem): Observable<void> {
     return new Observable<void>(
       subscriber => {

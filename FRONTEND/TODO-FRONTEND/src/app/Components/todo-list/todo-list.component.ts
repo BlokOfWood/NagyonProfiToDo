@@ -1,9 +1,11 @@
 import { Component, DebugElement, OnInit } from '@angular/core';
 import { TaskPriority, TodoItem } from 'src/app/interfaces';
 import { LocalApiService } from 'src/app/local-api.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateTodoDialogComponent } from 'src/app/create-todo-dialog/create-todo-dialog.component';
 
-interface TodoItemDictionary{
-  [todoId: number] : TodoItem;
+interface TodoItemDictionary {
+  [todoId: number]: TodoItem;
 }
 
 @Component({
@@ -15,8 +17,9 @@ export class TodoListComponent implements OnInit {
   todoItemsDictionary: TodoItemDictionary = {};
 
   constructor(
-    private apiService: LocalApiService
-    ) { 
+    private apiService: LocalApiService,
+    private dialog: MatDialog
+  ) {
 
   }
 
@@ -41,5 +44,15 @@ export class TodoListComponent implements OnInit {
   markTaskAsUndone(id: number): void {
     this.todoItemsDictionary[id].done = false;
     this.apiService.updateTodoItem(this.todoItemsDictionary[id]).subscribe()
+  }
+
+  openNewTodoItemDialog(): void {
+    const dialogRef = this.dialog.open(CreateTodoDialogComponent);
+    dialogRef.afterClosed().subscribe(() => {
+      this.apiService.getTodoItems().subscribe(todoItems => {
+        console.log(todoItems);
+        this.generateDictonaryFromTodoItemList(todoItems);
+      })
+    })
   }
 }
