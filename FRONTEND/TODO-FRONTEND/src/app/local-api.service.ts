@@ -41,10 +41,10 @@ export class LocalApiService {
       }))
   }
 
-  updateTodoItem(): Observable<void> {
+  updateTodoItem(todoItem: TodoItem): Observable<void> {
     return new Observable<void>(
       subscriber => {
-        this.apiFunctions.patch('todos', new Headers()).subscribe(() => {
+        this.apiFunctions.patch('todos/' + todoItem.todoID, todoItem, new Headers()).subscribe(() => {
           subscriber.next()
           subscriber.complete()
         })

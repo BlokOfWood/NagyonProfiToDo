@@ -35,9 +35,11 @@ export class TodoListComponent implements OnInit {
 
   markTaskAsDone(id: number): void {
     this.todoItemsDictionary[id].done = true;
+    this.apiService.updateTodoItem(this.todoItemsDictionary[id]).subscribe()
   }
 
   markTaskAsUndone(id: number): void {
     this.todoItemsDictionary[id].done = false;
+    this.apiService.updateTodoItem(this.todoItemsDictionary[id]).subscribe()
   }
 }
