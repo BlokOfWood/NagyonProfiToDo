@@ -54,8 +54,8 @@ func main() {
 
 	mux.HandleFunc("/todos", controllers.Todo_Controller).Methods("GET", "POST")
 	mux.HandleFunc("/todos/{id:[0-9]+}", controllers.TodoID_Controller).Methods("GET", "PATCH", "DELETE")
-	mux.HandleFunc("/login", controllers.Login_Controller).Methods("GET", "POST")
-	mux.HandleFunc("/register", controllers.Register_Controller).Methods("GET", "POST")
+	mux.HandleFunc("/login", controllers.Login_Controller).Methods("POST")
+	mux.HandleFunc("/register", controllers.Register_Controller).Methods("POST")
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Server is running"))
 	}).Methods("GET")

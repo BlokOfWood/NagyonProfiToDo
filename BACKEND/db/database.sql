@@ -1,7 +1,7 @@
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for tareas
+-- Table structure for todos
 -- ----------------------------
 DROP TABLE IF EXISTS `Todos`;
 CREATE TABLE `Todos` (
@@ -11,7 +11,7 @@ CREATE TABLE `Todos` (
   `Description` text NOT NULL,
   `Priority` enum('Critical','Urgent','Important','Normal','Eventually') NOT NULL,
   `Done` tinyint(1) NOT NULL DEFAULT 0 COMMENT "Boolean",
-  `Deadline` datetime NOT NULL COMMENT 'Deadline',
+  `Deadline` datetime NOT NULL,
   `CreatedAt` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`TodoID`),
   KEY `UserID` (`UserID`),
@@ -19,7 +19,7 @@ CREATE TABLE `Todos` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Table structure for usuarios
+-- Table structure for users
 -- ----------------------------
 DROP TABLE IF EXISTS `Users`;
 CREATE TABLE `Users` (
