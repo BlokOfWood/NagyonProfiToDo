@@ -35,8 +35,10 @@ func LoadFlags() string {
 
 func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Middleware", r.URL)
-		log.Printf("%s %s %s\n\n\n", r.RemoteAddr, r.Method, r.URL)
+		fmt.Println("\n\n\nMiddleware\t", r.URL)
+		log.Println("")
+		fmt.Printf("Address:\t%s\n", r.RemoteAddr)
+		fmt.Printf("Method:\t%s\n", r.Method)
 		next.ServeHTTP(w, r)
 	})
 }

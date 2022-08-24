@@ -31,3 +31,14 @@ CREATE TABLE `Users` (
   `Salt` char(8) DEFAULT NULL,
   PRIMARY KEY (`UserID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `Sessions`;
+CREATE TABLE `Users` (
+  `UserID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `SessionID` char(16) DEFAULT NULL,
+  `Name` varchar(128) NOT NULL,
+  `Email` varchar(128) NOT NULL,
+  `PasswordHash` char(64) DEFAULT NULL,
+  `Salt` char(8) DEFAULT NULL,
+  PRIMARY KEY (`UserID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;

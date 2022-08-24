@@ -1,11 +1,23 @@
 package utils
 
 import (
+	"fmt"
+	"log"
 	"time"
 )
 
 func ValidateSessionID(sessionID string) bool {
-	return len(sessionID) == 16
+	if len(sessionID) == 16 {
+		return true
+	}
+	if sessionID == "" {
+		log.Printf("Error\n\t")
+		fmt.Println("sessionID is empty")
+		return false
+	}
+	log.Printf("Error\n\t")
+	fmt.Println("sessionID is not valid")
+	return false
 }
 
 func CheckPasswords(password string, repeatedPassword string) bool {

@@ -12,20 +12,18 @@ func Todo_Controller(w http.ResponseWriter, r *http.Request) {
 
 	// Get SessionID from request header
 	sessionID := DecodeSessionID(r)
-
-	fmt.Println("SessionID: ", sessionID)
+	var err error
 
 	// Validate SessionID
 	if !utils.ValidateSessionID(sessionID) {
-		fmt.Println("Validate sessionID failed")
 		http.Error(w, "Validate sessionID failed", http.StatusForbidden)
 		return
 	}
-
+	fmt.Println("SessionID: ", sessionID)
 	// Get UserID by SessionID
 	userID, err := db.GetUserIDBySessionID(sessionID)
 	if err != nil {
-		fmt.Println("Get UserID by SessionID failed")
+		fmt.Println("Error getting userID by sessionID")
 		http.Error(w, "Get UserID by SessionID failed", http.StatusForbidden)
 		return
 	}
@@ -42,7 +40,6 @@ func Todo_Controller(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-
 		// Send response back
 		SendResponse(w, result)
 
@@ -58,15 +55,12 @@ func Todo_Controller(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Check date format
-		asd, err := utils.ValidateDate(Todo.Deadline)
-		println(asd)
+		Todo.Deadline, err = utils.ValidateDate(Todo.Deadline)
 		if err != nil {
 			fmt.Println("ValidateDate failed")
 			http.Error(w, "ValidateDate failed", http.StatusBadRequest)
 			return
 		}
-
-		Todo.Deadline = asd
 
 		//
 		id, err := db.CreateTodo(Todo, userID)

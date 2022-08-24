@@ -50,6 +50,10 @@ func DecodeSessionID(r *http.Request) string {
 	return r.Header.Get("sessionID")
 }
 
+func DecodeID(r *http.Request) string {
+	return r.Header.Get("ID")
+}
+
 func SendResponseW(w http.ResponseWriter, i any, wrapper ...string) {
 	data, err := json.Marshal(i)
 	if err != nil {

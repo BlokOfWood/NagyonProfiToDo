@@ -2,8 +2,8 @@ package db
 
 import "Todo/models"
 
-func UpdateTodoItem(editor models.TodoEditor, id int) (int64, error) {
-	result, err := Db.Exec("UPDATE `todos` SET `Name`= ?, `Description`= ?, `Priority`= ?, `Done`= ?, `Deadline`= ? WHERE `ToDoID`= ?",
+func UpdateTodoItem(editor models.TodoEditor, id int) error {
+	_, err := Db.Exec("UPDATE `todos` SET `Name`= ?, `Description`= ?, `Priority`= ?, `Done`= ?, `Deadline`= ? WHERE `TodoID`= ?",
 		editor.Name,
 		editor.Description,
 		editor.Priority,
@@ -12,18 +12,18 @@ func UpdateTodoItem(editor models.TodoEditor, id int) (int64, error) {
 		id)
 
 	if err != nil {
-		return 0, err
+		return err
 	}
 
-	return result.RowsAffected()
+	return nil
 }
 
-func DeleteTodoFromDB(userID uint, ToDoID uint) (int64, error) {
-	result, err := Db.Exec("DELETE FROM `todos` WHERE `UserID`=? AND `ToDoID`=? ;", userID, ToDoID)
+func DeleteTodoFromDB(userID uint, ToDoID int) error {
+	_, err := Db.Exec("DELETE FROM `todos` WHERE `UserID`=? AND `TodoID`=? ;", userID, ToDoID)
 	if err != nil {
-		return 0, err
+		return err
 	}
-	return result.RowsAffected()
+	return nil
 }
 
 func DeleteTodosFromDB(userID uint) (int64, error) {

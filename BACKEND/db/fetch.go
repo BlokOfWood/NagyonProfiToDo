@@ -65,3 +65,26 @@ func GetTodosFromDB(userID uint) ([]models.Todo, error) {
 
 	return result, nil
 }
+
+func GetTodoFromDB(userID uint, todoID int) (*models.Todo, error) {
+	result := &models.Todo{}
+
+	// SELECT * FROM Users WHERE Username
+	rows, err := Db.Query("SELECT `TodoID`,`Name`,`Description`,`Priority`,`Done`,`Deadline`,`CreatedAt` FROM `todos` WHERE `UserID`=? AND `TodoID`=?;", userID, todoID)
+
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		err := rows.Scan(&result.TodoID, &result.Name, &result.Description, &result.Priority, &result.Done, &result.Deadline, &result.CreatedAt)
+		if err != nil {
+			fmt.Println("Reading error:", err)
+			return nil, err
+		}
+	}
+
+	return result, nil
+}

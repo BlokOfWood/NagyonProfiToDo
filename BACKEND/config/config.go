@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -13,9 +12,8 @@ import (
 func LoadEnv(databaseParams *models.DatabaseParams) {
 	err := godotenv.Load(".env")
 	if err != nil {
-		fmt.Println("fataaaaaal error")
+		log.Println("Error loading .env file:")
 		log.Fatal(err)
-		return
 	}
 	// database
 	databaseParams.Driver = os.Getenv("DatabaseDriver")
