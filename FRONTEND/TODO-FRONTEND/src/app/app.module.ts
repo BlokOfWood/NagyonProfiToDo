@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TodoListComponent } from './Components/todo-list/todo-list.component';
 import { RegistrationComponent } from './Components/registration/registration.component';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { LoginComponent } from './Components/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NavBarComponent } from './Components/nav-bar/nav-bar.component';
@@ -40,7 +41,7 @@ import { CreateTodoDialogComponent } from './create-todo-dialog/create-todo-dial
     MatNativeDateModule,
     MatSelectModule
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

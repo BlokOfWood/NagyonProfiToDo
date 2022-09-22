@@ -1,48 +1,40 @@
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
-import { LoginInfo, RegistrationInfo, TaskPriority, TodoEditor, TodoItem } from './interfaces';
-import { APIFunctions } from './request-helper';
+import {Observable, tap} from 'rxjs';
+import {LoginInfo, RegistrationInfo, SessionIdResponse, TaskPriority, TodoEditor, TodoItem} from './interfaces';
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalApiService {
-  apiFunctions: APIFunctions = new APIFunctions("http://81.182.202.18:4000/");
+  apiAddress = "http://localhost:4000/";
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
-  attemptLogin(loginInfo: LoginInfo): Observable<void> {
-    return new Observable<void>(
-      subscriber => {
-        this.apiFunctions.post('login', loginInfo).subscribe(sessionIDResponse => {
-          localStorage.setItem('sessionID', JSON.parse(sessionIDResponse).sessionID)
-          subscriber.next()
-          subscriber.complete()
-        })
-      }
-    );
+  attemptLogin(loginInfo: LoginInfo): Observable<SessionIdResponse> {
+    return this.httpClient.post<SessionIdResponse>(this.apiAddress + "login", loginInfo)
+      .pipe(
+        tap(x =>  {
+          localStorage.setItem('sessionID', x.sessionID);
+        }
+      ));
   }
 
-  attemptRegister(registrationInfo: RegistrationInfo): Observable<void> {
-    return new Observable<void>(
-      subscriber => {
-        this.apiFunctions.post('register', registrationInfo).subscribe(sessionIDResponse => {
-          subscriber.next()
-          subscriber.complete()
+  attemptRegister(registrationInfo: RegistrationInfo): Observable<SessionIdResponse> {
+    return this.httpClient.post<SessionIdResponse>(this.apiAddress + "register", registrationInfo)
+      .pipe(
+        tap(x =>  {
+          localStorage.setItem('sessionID', x.sessionID);
         })
-      }
-    );
+      );
   }
 
   getTodoItems(): Observable<TodoItem[]> {
-    return this.apiFunctions.get('todos', new Headers())
-      .pipe(map(todoItemList => {
-        return JSON.parse(todoItemList)
-      }))
+    return this.httpClient.get<TodoItem[]>(this.apiAddress + "todos");
   }
 
-  createTodoItem(todoTitle: string): Observable<void> {
-    var todoEditor: TodoEditor = {
+  createTodoItem(todoTitle: string): Observable<Object> {
+    let todoEditor: TodoEditor = {
       name: todoTitle,
       priority: TaskPriority.NORMAL,
       done: false,
@@ -50,24 +42,10 @@ export class LocalApiService {
       deadline: new Date(),
     }
 
-    return new Observable<void>(
-      subscriber => {
-        this.apiFunctions.post('todos', todoEditor, new Headers()).subscribe(() => {
-          subscriber.next()
-          subscriber.complete()
-        })
-      }
-    );
+    return this.httpClient.post(this.apiAddress + "todos", todoEditor);
   }
 
-  updateTodoItem(todoItem: TodoItem): Observable<void> {
-    return new Observable<void>(
-      subscriber => {
-        this.apiFunctions.patch('todos/' + todoItem.todoID, todoItem, new Headers()).subscribe(() => {
-          subscriber.next()
-          subscriber.complete()
-        })
-      }
-    );
+  updateTodoItem(todoItem: TodoItem): Observable<Object> {
+    return this.httpClient.patch(this.apiAddress + "todos/" + todoItem.todoID, todoItem);
   }
 }
