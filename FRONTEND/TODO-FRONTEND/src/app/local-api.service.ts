@@ -14,8 +14,8 @@ export class LocalApiService {
   attemptLogin(loginInfo: LoginInfo): Observable<SessionIdResponse> {
     return this.httpClient.post<SessionIdResponse>(this.apiAddress + "login", loginInfo)
       .pipe(
-        tap(x =>  {
-          localStorage.setItem('sessionID', x.sessionID);
+        tap(response =>  {
+          localStorage.setItem('sessionID', response.sessionID);
         }
       ));
   }
@@ -23,8 +23,8 @@ export class LocalApiService {
   attemptRegister(registrationInfo: RegistrationInfo): Observable<SessionIdResponse> {
     return this.httpClient.post<SessionIdResponse>(this.apiAddress + "register", registrationInfo)
       .pipe(
-        tap(x =>  {
-          localStorage.setItem('sessionID', x.sessionID);
+        tap(response =>  {
+          localStorage.setItem('sessionID', response.sessionID);
         })
       );
   }
