@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable, tap} from 'rxjs';
-import {LoginInfo, RegistrationInfo, SessionIdResponse, TaskPriority, TodoEditor, TodoItem} from './interfaces';
+import {LoginInfo, RegistrationInfo, SessionIdResponse, TodoEditor, TodoItem} from './interfaces';
 import {HttpClient} from "@angular/common/http";
 
 @Injectable({
@@ -33,19 +33,11 @@ export class LocalApiService {
     return this.httpClient.get<TodoItem[]>(this.apiAddress + "todos");
   }
 
-  createTodoItem(todoTitle: string): Observable<Object> {
-    let todoEditor: TodoEditor = {
-      name: todoTitle,
-      priority: TaskPriority.NORMAL,
-      done: false,
-      description: "",
-      deadline: new Date(),
-    }
-
-    return this.httpClient.post(this.apiAddress + "todos", todoEditor);
+  createTodoItem(newTodoItem: TodoEditor): Observable<Object> {
+    return this.httpClient.post(this.apiAddress + "todos", newTodoItem);
   }
 
-  updateTodoItem(todoItem: TodoItem): Observable<Object> {
-    return this.httpClient.patch(this.apiAddress + "todos/" + todoItem.todoID, todoItem);
+  updateTodoItem(todoId: number, todoEditor: TodoEditor): Observable<Object> {
+    return this.httpClient.patch(this.apiAddress + "todos/" + todoId, todoEditor);
   }
 }

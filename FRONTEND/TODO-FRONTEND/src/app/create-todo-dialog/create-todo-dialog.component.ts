@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { LocalApiService } from '../local-api.service';
+import { MatDialogRef } from '@angular/material/dialog';
+import {TodoItemsService} from "../todo-items-service";
 
 @Component({
   selector: 'app-create-todo-dialog',
@@ -15,7 +15,7 @@ export class CreateTodoDialogComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<CreateTodoDialogComponent>,
-    private localApiService: LocalApiService
+    private todoItemsService: TodoItemsService
   ) { }
 
   ngOnInit(): void {
@@ -26,9 +26,8 @@ export class CreateTodoDialogComponent implements OnInit {
   }
 
   createTodo(): void {
-    this.localApiService.createTodoItem(this.formGroup.value.name).subscribe(() => {
+    this.todoItemsService.createTodoItem(this.formGroup.value.name).subscribe(() => {
       this.closeDialog();
-      this.localApiService.getTodoItems();
     })
   }
 }

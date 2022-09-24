@@ -1,12 +1,10 @@
-import { Component, DebugElement, OnInit } from '@angular/core';
-import { TaskPriority, TodoItem } from 'src/app/interfaces';
-import { LocalApiService } from 'src/app/local-api.service';
-import { MatDialog } from '@angular/material/dialog';
-import { CreateTodoDialogComponent } from 'src/app/create-todo-dialog/create-todo-dialog.component';
-
-interface TodoItemDictionary {
-  [todoId: number]: TodoItem;
-}
+import {Component, OnInit} from '@angular/core';
+import {TaskPriority, } from 'src/app/interfaces';
+import {MatDialog} from '@angular/material/dialog';
+import {CreateTodoDialogComponent} from 'src/app/create-todo-dialog/create-todo-dialog.component';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {TodoItemsService} from "../../todo-items-service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-todo-list',
@@ -14,45 +12,56 @@ interface TodoItemDictionary {
   styleUrls: ['./todo-list.component.scss']
 })
 export class TodoListComponent implements OnInit {
-  todoItemsDictionary: TodoItemDictionary = {};
+  editedID: number = 0;
+
+  currentFormSubscription: Subscription | null = null;
+
+  formGroup = new FormGroup({
+    name: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
+    priority: new FormControl(TaskPriority.NORMAL, Validators.required),
+    done: new FormControl(false),
+    deadline: new FormControl(new Date(), Validators.required)
+  }, {
+      updateOn: "blur"
+  });
+  taskPriorities = Object.values(TaskPriority);
 
   constructor(
-    private apiService: LocalApiService,
+    public todoItemService: TodoItemsService,
     private dialog: MatDialog
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.apiService.getTodoItems().subscribe(todoItems => {
-      console.log(todoItems)
-      this.generateDictonaryFromTodoItemList(todoItems);
-    })
-  }
-
-  generateDictonaryFromTodoItemList(todoItemList: TodoItem[]) {
-    todoItemList.forEach(task => {
-      this.todoItemsDictionary[task.todoID] = task;
-    })
   }
 
   markTaskAsDone(id: number): void {
-    this.todoItemsDictionary[id].done = true;
-    this.apiService.updateTodoItem(this.todoItemsDictionary[id]).subscribe()
+    this.todoItemService.changeTodoItemCompletion(id, true);
   }
 
   markTaskAsUndone(id: number): void {
-    this.todoItemsDictionary[id].done = false;
-    this.apiService.updateTodoItem(this.todoItemsDictionary[id]).subscribe()
+    this.todoItemService.changeTodoItemCompletion(id, false);
+  }
+
+  openTodoItemPanel(id: number): void {
+    if(this.currentFormSubscription != null)
+      this.currentFormSubscription.unsubscribe();
+
+    this.editedID = id;
+
+    this.formGroup.setValue(this.todoItemService.getTodoEditor(id)!);
+
+    this.currentFormSubscription = this.formGroup.valueChanges.subscribe(_ => {
+      this.updateTodoItem(id);
+    })
+  }
+
+  updateTodoItem(id: number): void {
+    const formValue = this.formGroup.value;
+    this.todoItemService.updateTodoItem(id, formValue.name!, formValue.description!, formValue.priority!, formValue.deadline!)
   }
 
   openNewTodoItemDialog(): void {
-    const dialogRef = this.dialog.open(CreateTodoDialogComponent);
-    dialogRef.afterClosed().subscribe(() => {
-      this.apiService.getTodoItems().subscribe(todoItems => {
-        console.log(todoItems);
-        this.generateDictonaryFromTodoItemList(todoItems);
-      })
-    })
+    this.dialog.open(CreateTodoDialogComponent);
   }
 }
