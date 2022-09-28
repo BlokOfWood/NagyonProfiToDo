@@ -22,7 +22,7 @@ func GetUsernameAvailable(username string) bool {
 func GetUserBySessionID(sessionID string) (string, error) {
 	var username string
 
-	rows, err := Db.Query("SELECT `Name` FROM `Users` WHERE `SessionID` = ?;", sessionID)
+	rows, err := Db.Query("SELECT `Name` FROM `Users` LEFT JOIN `Sessions` ON `Users.UserID` = `Sessions.UserID` WHERE `SessionID` = ?;", sessionID)
 
 	if err != nil {
 		return "", err
@@ -40,7 +40,7 @@ func GetUserBySessionID(sessionID string) (string, error) {
 func GetUserIDBySessionID(sessionID string) (uint, error) {
 	var userID uint
 
-	rows, err := Db.Query("SELECT `UserID` FROM `Users` WHERE `SessionID` = ?;", sessionID)
+	rows, err := Db.Query("SELECT `UserID` FROM `Sessions` WHERE `SessionID` = ?;", sessionID)
 	if err != nil {
 		return 0, err
 	}
@@ -52,4 +52,20 @@ func GetUserIDBySessionID(sessionID string) (uint, error) {
 	}
 
 	return userID, nil
+}
+func GetUserIDByName(username string) uint {
+	var userID uint
+
+	rows, err := Db.Query("SELECT `UserID` FROM `Users` WHERE `Name` = ?;", username)
+	if err != nil {
+		return 0
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		rows.Scan(&userID)
+	}
+
+	return userID
 }

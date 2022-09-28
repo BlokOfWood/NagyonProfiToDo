@@ -50,12 +50,13 @@ func Login_Controller(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create a new session and update the database
-	sessionID, err := db.UpdateSessionID(loginInfo.Username)
+	err = db.UpdateSessionID(loginInfo.Username)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusForbidden)
 		return
 	}
 
 	// Send the sessionID back to the client
-	SendResponse(w, models.SessionInfo{SessionID: sessionID})
+	// SendResponse(w, models.SessionInfo{SessionID: sessionID})
+	w.Write([]byte("Login successful"))
 }

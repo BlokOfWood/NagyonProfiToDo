@@ -21,6 +21,12 @@ func CreateUser(registrationInfo *models.RegistrationInfo) bool {
 		return false
 	}
 
+	err = InitalizeSessionID(registrationInfo.Username)
+	if err != nil {
+		fmt.Println("Failed to initalize sessionID")
+		return false
+	}
+
 	return err == nil
 }
 

@@ -8,6 +8,10 @@ import (
 	"net/http"
 )
 
+func ASD(w http.ResponseWriter, r *http.Request) {
+
+}
+
 func CheckSessionID(w http.ResponseWriter, r *http.Request) uint {
 	// Get SessionID from request header
 	sessionID := DecodeSessionID(r)
