@@ -4,18 +4,10 @@ import (
 	"Todo/db"
 	"Todo/models"
 	"Todo/utils"
-	"fmt"
 	"net/http"
 )
 
 func Login_Controller(w http.ResponseWriter, r *http.Request) {
-
-	// Check if the request is a POST FOR SURE
-	if r.Method != http.MethodPost {
-		fmt.Println("Invalid request method")
-		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
-		return
-	}
 
 	// Create a new instance of LoginInfo
 	var loginInfo models.LoginInfo
@@ -57,6 +49,5 @@ func Login_Controller(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Send the sessionID back to the client
-	// SendResponse(w, models.SessionInfo{SessionID: sessionID})
-	w.Write([]byte("Login successful"))
+	SendResponse(w, models.ResponseMessage{Message: "Login successful"})
 }

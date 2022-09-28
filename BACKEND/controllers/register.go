@@ -8,11 +8,6 @@ import (
 
 func Register_Controller(w http.ResponseWriter, r *http.Request) {
 
-	if r.Method != http.MethodPost {
-		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
-		return
-	}
-
 	// Create a new instance of RegistrationInfo
 	var registrationInfo models.RegistrationInfo
 
