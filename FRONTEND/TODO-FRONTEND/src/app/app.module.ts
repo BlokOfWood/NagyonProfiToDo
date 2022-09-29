@@ -18,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from "@angular/material/select";
 import { CreateTodoDialogComponent } from './create-todo-dialog/create-todo-dialog.component';
+import {AuthInterceptorService} from "./auth-interceptor.service";
 
 @NgModule({
   declarations: [
