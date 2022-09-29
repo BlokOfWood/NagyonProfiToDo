@@ -2,9 +2,12 @@
 
     <span class="form-label">Username </span>
     <input type="text" formControlName="username">
-    
+
     <span class="form-label">Password </span>
     <input type="password" formControlName="password">
+
+    <span class="form-label">Remember Info</span>
+    <input type="checkbox" id="rememberInfo" formControlName="rememberInfo">
 
     <button (click)="loginAttempt()">login</button>
 </form>

@@ -3,7 +3,7 @@ import {Observable} from "rxjs";
 
 export class AuthInterceptorService implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let sessionID = localStorage.getItem('sessionID');
+    let sessionID = sessionStorage.getItem('sessionID');
 
     if (sessionID !=  null) {
       const modifiedRequest = req.clone({headers: req.headers.set('sessionID', sessionID)});

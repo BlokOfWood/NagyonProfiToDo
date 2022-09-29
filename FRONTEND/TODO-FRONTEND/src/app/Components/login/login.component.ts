@@ -12,7 +12,8 @@ import {AuthService} from "../../auth-service";
 export class LoginComponent {
   formGroup: FormGroup = new FormGroup({
     username: new FormControl(''),
-    password: new FormControl('')
+    password: new FormControl(''),
+    rememberInfo: new FormControl(false),
   })
 
   constructor(
