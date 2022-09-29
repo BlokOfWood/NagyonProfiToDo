@@ -1,31 +1,16 @@
-<div class="edit-course-form">
+<div>
 
     <h2 mat-dialog-title>Create New Todo Item</h2>
 
     <mat-dialog-content [formGroup]="formGroup">
-
-        <mat-form-field>
-
-            <input matInput
-                   placeholder="Todo Item Name"
-                   formControlName="name">
-
+        <mat-form-field appearance="fill">
+            <mat-label>Todo Title</mat-label>
+            <input matInput placeholder="Todo Item Name" formControlName="name" >
         </mat-form-field>
-
-
     </mat-dialog-content>
 
     <mat-dialog-actions>
-
         <button mat-raised-button (click)="closeDialog()">Cancel</button>
-
         <button mat-raised-button color="primary" (click)="createTodo()">Save</button>
-
     </mat-dialog-actions>
-
 </div>
-
-
-
-
-
