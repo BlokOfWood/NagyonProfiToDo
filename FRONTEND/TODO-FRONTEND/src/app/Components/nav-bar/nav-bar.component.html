@@ -1,8 +1,14 @@
 <nav>
+  <ng-template [ngIf]="this.authService.loggedIn" [ngIfElse]="LoggedOut">
     <a class="brand-logo" [routerLink]="['todolist']">Todo</a>
-
     <span class="spacer"></span>
+    <a (click)="logout()">Logout</a>
+  </ng-template>
 
+
+  <ng-template #LoggedOut>
     <a [routerLink]="['login']">Login</a>
+    <span class="spacer"></span>
     <a [routerLink]="['register']">Register</a>
+  </ng-template>
 </nav>
