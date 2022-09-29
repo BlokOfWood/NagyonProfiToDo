@@ -7,5 +7,22 @@ body {
     width: 100%;
     height: 100%;
     font-size: 0;
-    font-family: Arial;
+    font-family: Arial, serif;
+}
+
+
+
+.mat-button-base {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    .mat-button-wrapper {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 0 !important;
+        width: 100%;
+        height: 100%;
+    }
 }
