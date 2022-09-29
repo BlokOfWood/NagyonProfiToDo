@@ -36,12 +36,10 @@ import { CreateTodoDialogComponent } from './create-todo-dialog/create-todo-dial
     MatButtonModule,
     MatDatepickerModule,
     MatDialogModule,
-    MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
     MatSelectModule,
-    MatSidenavModule,
     HttpClientModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
