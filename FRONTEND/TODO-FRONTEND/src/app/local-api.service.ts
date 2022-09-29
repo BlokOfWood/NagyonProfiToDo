@@ -1,6 +1,13 @@
-import { Injectable } from '@angular/core';
-import {Observable, tap} from 'rxjs';
-import {LoginInfo, RegistrationInfo, SessionIdResponse, TodoEditor, TodoItem} from './interfaces';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {
+  CheckSessionIdResponse,
+  LoginInfo,
+  RegistrationInfo,
+  SessionIdResponse,
+  TodoEditor,
+  TodoItem
+} from './interfaces';
 import {HttpClient} from "@angular/common/http";
 
 @Injectable({
@@ -12,21 +19,11 @@ export class LocalApiService {
   constructor(private httpClient: HttpClient) { }
 
   attemptLogin(loginInfo: LoginInfo): Observable<SessionIdResponse> {
-    return this.httpClient.post<SessionIdResponse>(this.apiAddress + "login", loginInfo)
-      .pipe(
-        tap(response =>  {
-          localStorage.setItem('sessionID', response.sessionID);
-        }
-      ));
+    return this.httpClient.post<SessionIdResponse>(this.apiAddress + "login", loginInfo);
   }
 
   attemptRegister(registrationInfo: RegistrationInfo): Observable<SessionIdResponse> {
-    return this.httpClient.post<SessionIdResponse>(this.apiAddress + "register", registrationInfo)
-      .pipe(
-        tap(response =>  {
-          localStorage.setItem('sessionID', response.sessionID);
-        })
-      );
+    return this.httpClient.post<SessionIdResponse>(this.apiAddress + "register", registrationInfo);
   }
 
   getTodoItems(): Observable<TodoItem[]> {

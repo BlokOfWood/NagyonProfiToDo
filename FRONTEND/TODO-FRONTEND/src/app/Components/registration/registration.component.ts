@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RegistrationInfo } from 'src/app/interfaces';
-import { LocalApiService } from 'src/app/local-api.service';
+import {AuthService} from "../../auth-service";
 
 @Component({
   selector: 'app-registration',
@@ -19,12 +19,12 @@ export class RegistrationComponent implements OnInit {
     repeatedPassword: new FormControl('')
   })
   get email() {
-    return this.formGroup.get('email'); 
+    return this.formGroup.get('email');
   }
   currentErrorMessage : string = "";
 
   constructor(
-    private apiService : LocalApiService,
+    private authService : AuthService,
     private router : Router
   ) { }
 
@@ -37,10 +37,10 @@ export class RegistrationComponent implements OnInit {
       this.triedToRegister = true;
       return;
     }
-      
+
     const registrationInfo: RegistrationInfo = this.formGroup.value;
 
-    this.apiService.attemptRegister(registrationInfo).subscribe(() => {
+    this.authService.register(registrationInfo).subscribe(() => {
       console.log('registration successful');
       this.router.navigate(['login']);
     })
