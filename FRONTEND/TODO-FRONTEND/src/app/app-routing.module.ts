@@ -8,7 +8,8 @@ import {AuthGuardService} from "./auth-guard.service";
 const routes: Routes = [
   { path: 'todolist', component: TodoListComponent, canActivate: [AuthGuardService]},
   { path: 'register', component: RegistrationComponent},
-  { path: 'login', component: LoginComponent}
+  { path: 'login', component: LoginComponent},
+  { path: '', redirectTo: '/todolist', pathMatch: 'full'}
 ];
 
 @NgModule({
