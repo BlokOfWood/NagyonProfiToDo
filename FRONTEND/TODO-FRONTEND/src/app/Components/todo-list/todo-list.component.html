@@ -1,13 +1,51 @@
-<div id="todo-list-container">
-    <ul class="todo-list">
-        <li class="todo-item" *ngFor="let todoItem of todoItemsDictionary | keyvalue">
-            <span class="todo-name" [ngClass]="{'todo-done-item': todoItem.value.done}">{{todoItem.value.name}}</span>
+<ul class="todo-list">
+  <video autoplay [muted]="'muted'" playsinline loop id="background-video" [ngSwitch]="randomVideo">
+    <source src="/assets/scpgaming.mp4" type="video/mp4" *ngSwitchCase="0">
+    <source src="/assets/olives.mp4" type="video/mp4" *ngSwitchCase="1">
+    <source src="/assets/spiralificationparty.mp4" type="video/mp4" *ngSwitchCase="2">
+    <source src="/assets/weazelhole.mp4" type="video/mp4" *ngSwitchCase="3">
+  </video>
 
-            <button *ngIf="todoItem.value.done" id="todo-done-button" (click)="markTaskAsUndone(todoItem.value.todoID)"><i class="fa-solid fa-check"></i></button>
-            <button *ngIf="!todoItem.value.done" id="todo-done-button" (click)="markTaskAsDone(todoItem.value.todoID)"><i class="fa-solid fa-xmark"></i></button>
+  <button mat-raised-button id="todo-add-button" (click)="openNewTodoItemDialog()">Add Todo Item</button>
 
-            <button id="todo-expand-button"><i class="fa-solid fa-angle-down"></i></button>
-        </li>
-    </ul>
-    <button mat-raised-button id="todo-add-button" (click)="openNewTodoItemDialog()">Add Todo Item</button>
-</div>
+  <li class="todo-item" *ngFor="let todoItem of todoItemService.todoItemsDictionary | keyvalue">
+    <div class="todo-item-display">
+      <span class="todo-name" [ngClass]="{'todo-done-item': todoItem.value.done}">{{todoItem.value.name}}</span>
+
+      <button mat-fab *ngIf="todoItem.value.done" class="todo-done-button"
+        (click)="markTaskAsUndone(todoItem.value.todoID)"><i class="fa-solid fa-check"></i></button>
+      <button mat-fab *ngIf="!todoItem.value.done" class="todo-done-button"
+        (click)="markTaskAsDone(todoItem.value.todoID)"><i class="fa-solid fa-xmark"></i></button>
+
+      <button mat-fab class="todo-expand-button" (click)="openTodoItemPanel(todoItem.value.todoID)"><i
+          class="fa-solid fa-pencil"></i></button>
+
+    </div>
+
+    <ng-template class="todo-item-editor" [ngIf]="editedID == todoItem.key">
+      <form [formGroup]="formGroup">
+        <div>
+          <span class="form-label">Task Name </span>
+          <input type="text" formControlName="name" required>
+        </div>
+        <div>
+          <span class="form-label">Task Description </span>
+          <input type="text" formControlName="description" required>
+        </div>
+        <div>
+          <span class="form-label">Priority </span>
+          <select>
+            <option *ngFor="let priority of taskPriorities" [value]="priority">
+              {{priority}}
+            </option>
+          </select>
+        </div>
+        <div>
+          <span class="form-label">Done</span>
+          <input type="checkbox" formControlName="done" required>
+        </div>
+      </form>
+    </ng-template>
+
+  </li>
+</ul>

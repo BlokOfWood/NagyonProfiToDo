@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {TaskPriority, TodoEditor, TodoItem} from "./interfaces";
 import {LocalApiService} from "./local-api.service";
-import {Observable} from "rxjs";
+import {Observable, tap} from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -10,11 +10,15 @@ export class TodoItemsService {
   todoItemsDictionary: Map<number, TodoItem> = new Map();
 
   constructor(private localApiService: LocalApiService) {
-    localApiService.getTodoItems().subscribe(
-      todoItems => {
+    this.fetchTodoItems();
+  }
+
+  fetchTodoItems(): Observable<TodoItem[]> {
+    return this.localApiService.getTodoItems().pipe(
+      tap(todoItems => {
         this.initalizeTodoDictionary(todoItems);
       }
-    )
+    ))
   }
 
   initalizeTodoDictionary(todoItems: TodoItem[]) {

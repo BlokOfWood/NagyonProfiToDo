@@ -5,6 +5,7 @@ import {CreateTodoDialogComponent} from 'src/app/create-todo-dialog/create-todo-
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {TodoItemsService} from "../../todo-items-service";
 import {Subscription} from "rxjs";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-todo-list',
@@ -27,12 +28,21 @@ export class TodoListComponent implements OnInit {
   });
   taskPriorities = Object.values(TaskPriority);
 
+  randomVideo: number = 0;
+  numberOfVideos: number = 4;
+
   constructor(
     public todoItemService: TodoItemsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.randomVideo = Math.floor(Math.random() * this.numberOfVideos);
+
+    this.route.data.subscribe(x => 
+      console.log(x)
+      );
   }
 
   markTaskAsDone(id: number): void {

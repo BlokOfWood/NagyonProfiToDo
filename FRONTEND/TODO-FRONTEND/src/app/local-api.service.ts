@@ -37,4 +37,8 @@ export class LocalApiService {
   updateTodoItem(todoId: number, todoEditor: TodoEditor): Observable<Object> {
     return this.httpClient.patch(this.apiAddress + "todos/" + todoId, todoEditor);
   }
+
+  checkSessionId(sessionId: string): Observable<CheckSessionIdResponse> {
+    return this.httpClient.get<CheckSessionIdResponse>(this.apiAddress + "checkSession");
+  }
 }

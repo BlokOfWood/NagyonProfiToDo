@@ -42,3 +42,7 @@ export interface RegistrationInfo {
 export interface SessionIdResponse{
     sessionID : string
 }
+
+export interface CheckSessionIdResponse {
+  isCorrectSessionID: boolean
+}
