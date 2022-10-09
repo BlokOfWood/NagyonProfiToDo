@@ -75,3 +75,6 @@ baseline.json
 
 # Husky
 .husky/_
+
+BACKEND/build
+BACKEND_NEW/build
