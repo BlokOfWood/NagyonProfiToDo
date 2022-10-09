@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 
@@ -25,10 +26,19 @@ func Register_Controller(ctx *Server.FoxContext) error {
 		return err
 	}
 	qry := Server.MySQL.NewQuery(ctx)
-	var username Username
-	asd := qry.FetchAll(&username)
-
+	var usernames map[string]struct{}
+	err = qry.OpenSQL("SELECT * FROM USERS")
+	if err != nil {
+		log.Println("error: ", err)
+		return err
+	}
+	asd := qry.FetchAll(&usernames)
 	fmt.Println(asd)
+	fmt.Println(usernames)
+	if _, found := usernames[registrationInfo.Username]; found {
+		return errors.New("Username is already taken")
+	}
+
 	//TODO CreateUser with Salt and save into the DB
 
 	err = Server.MySQL.Begin(ctx, false)
@@ -39,7 +49,9 @@ func Register_Controller(ctx *Server.FoxContext) error {
 	qry = Server.MySQL.NewQuery(ctx)
 	var s Server.SqlStringList
 	s = append(s, registrationInfo.Username)
+
 	//TODO registrationInfo.Password + salt => password
+
 	salt := GenerateSalt()
 	password := EncodePassword(registrationInfo.Password, salt)
 	s = append(s, password)
