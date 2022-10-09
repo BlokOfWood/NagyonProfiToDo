@@ -77,12 +77,20 @@ func Login_Controller(ctx *Server.FoxContext) error {
 	}
 
 	//TODO GetSaltFromDB
+	// SELECT salt FROM USERS WHERE username = loginInfo.Username
+	salt := ""
 
 	//TODO EncodePassword
+	pwd := EncodePassword(loginInfo.Password, salt)
 
-	//TODO GetHashFromDB
+	//TODO GetPasswordFromDB
+	// SELECT password FROM USERS WHERE username = loginInfo.Username
+	password := ""
 
 	//TODO hash != dbHash
+	if pwd != password {
+		return errors.New("Wrong password")
+	}
 
 	//TODO UpdateSessionID
 
@@ -93,9 +101,15 @@ func Login_Controller(ctx *Server.FoxContext) error {
 }
 
 func Todo_Controller(ctx *Server.FoxContext) error {
+
+	// Basic Get all where user == user
+	// Nem tudom hogyan kell használni az SQL részt még :)
+
 	return nil
 }
 
 func TodoID_Controller(ctx *Server.FoxContext) error {
+	// Basic Get item where user == user and itemid == itemid
+	// Nem tudom hogyan kell használni az SQL részt még :)
 	return nil
 }
