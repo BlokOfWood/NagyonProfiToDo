@@ -8,11 +8,6 @@ import (
 
 func Register_Controller(w http.ResponseWriter, r *http.Request) {
 
-	if r.Method != http.MethodPost {
-		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
-		return
-	}
-
 	// Create a new instance of RegistrationInfo
 	var registrationInfo models.RegistrationInfo
 
@@ -28,7 +23,7 @@ func Register_Controller(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check that we can create user in the database
+	// Check that we can create user in the database and initalize sessionID
 	if !db.CreateUser(&registrationInfo) {
 		http.Error(w, "Something went wrong", http.StatusInternalServerError)
 		return

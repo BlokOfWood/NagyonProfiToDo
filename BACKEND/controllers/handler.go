@@ -8,6 +8,24 @@ import (
 	"net/http"
 )
 
+func CheckSession(w http.ResponseWriter, r *http.Request) {
+
+	// Get SessionID from request header
+	sessionID := DecodeSessionID(r)
+	var err error
+
+	// Validate SessionID
+	if !utils.ValidateSessionID(sessionID) {
+		http.Error(w, "Validate sessionID failed", http.StatusForbidden)
+	}
+	fmt.Println("SessionID: ", sessionID)
+	userID, err := db.GetUserIDBySessionID(sessionID)
+	if err != nil {
+		fmt.Println("Error getting userID by sessionID")
+		http.Error(w, "Get UserID by SessionID failed", http.StatusForbidden)
+	}
+}
+
 func CheckSessionID(w http.ResponseWriter, r *http.Request) uint {
 	// Get SessionID from request header
 	sessionID := DecodeSessionID(r)
